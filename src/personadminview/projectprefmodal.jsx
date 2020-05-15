@@ -9,7 +9,7 @@ import {
   ListGroup
 } from "react-bootstrap";
 
-export default function ProjectPrefModal({ user, onSave }) {
+export default function ProjectPrefModal({ user, customers, onSave }) {
   const [projects, setProjects] = useState(user.projects);
   const [customerId, setCustomerId] = useState(null);
 
@@ -22,67 +22,8 @@ export default function ProjectPrefModal({ user, onSave }) {
     onSave(u);
   };
 
-  const customers = [
-    {
-      customerId: 1,
-      name: "Asiakas",
-      projects: [
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: true },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false }
-      ]
-    },
-    {
-      customerId: 2,
-      name: "Asiakas",
-      projects: [
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: true },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false }
-      ]
-    },
-    {
-      customerId: 3,
-      name: "Asiakas",
-      projects: [
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: true },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false }
-      ]
-    },
-    {
-      customerId: 4,
-      name: "Asiakas",
-      projects: [
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: true },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false },
-        { projectId: 2, name: "Roject", selected: false }
-      ]
-    }
-  ];
-
   return (
-    <Modal show={user != null} onHide={handleClose}>
+    <Modal size="lg" show={user != null} onHide={handleClose}>
       <Modal.Header closeButton>Edit Person Rights</Modal.Header>
       <Modal.Body>
         <Form>
@@ -113,16 +54,20 @@ export default function ProjectPrefModal({ user, onSave }) {
                     <Collapse in={customerId != null}>
                       <ListGroup>
                         {customer.projects.map(project => {
+                          const name =
+                            project.notes == null
+                              ? project.name
+                              : project.name + ' "' + project.notes + '"';
                           return (
                             <ListGroup.Item
                               key={project.projectId}
-                              onClick={() => this.onChange(project)}
+                              onClick={() => onSave(project)}
                             >
                               <Form.Check
                                 type="checkbox"
                                 readOnly
                                 checked={project.selected}
-                                label={project.name}
+                                label={name}
                               />
                             </ListGroup.Item>
                           );
@@ -138,10 +83,7 @@ export default function ProjectPrefModal({ user, onSave }) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Cancel
-        </Button>
-        <Button variant="primary" onClick={handleSave}>
-          Save
+          Close
         </Button>
       </Modal.Footer>
     </Modal>

@@ -16,6 +16,8 @@ export default function UserDetailModal({ user, onSave }) {
     onSave(u);
   };
 
+  console.log(user);
+
   return (
     <Modal show={user != null} onHide={handleClose}>
       <Modal.Header closeButton>Edit Person Details</Modal.Header>

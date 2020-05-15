@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-/* import { connect } from "react-redux"; */
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
 import { Alert, Container, Row, Col, Button } from "react-bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -11,7 +11,7 @@ import ProjectPrefModal from "./projectprefmodal";
 import PrivilegeModal from "./privilegemodal";
 import PasswordModal from "./passwordmodal";
 
-/* import { fetchPersons, postPerson } from "../actions"; */
+import { fetchPersons, postProjectPreferences } from "../actions";
 
 const cellOptions = {
   0: "Deleted",
@@ -30,191 +30,200 @@ function flexFormatter({ person }) {
   }
 }
 
-function PersonAdminView({ persons }) {
-  const [editUserDetails, setUserDetails] = useState(null);
-  const [editFlexDetails, setFlexDetails] = useState(null);
-  const [editProjectPrefs, setProjectPrefs] = useState(null);
-  const [editPrivileges, setPrivileges] = useState(null);
-  const [changePassword, setChangePassword] = useState(null);
+class PersonAdminView extends Component {
+  constructor(props) {
+    super(props);
 
-  const columnsProp = [
-    {
-      dataField: "personId",
-      text: "Person Id",
-      headerStyle: { width: "10%" },
-      hidden: false
-    },
-    {
-      dataField: "info",
-      text: "Personal details",
-      headerStyle: { width: "20%" },
-      editable: false,
-      events: {
-        onClick: (e, column, columnIndex, row, rowIndex) => {
-          setUserDetails(row);
-        }
-      }
-    },
-    {
-      dataField: "flex",
-      text: "Flex hours",
-      headerStyle: { width: "20%" },
-      editable: false,
-      events: {
-        onClick: (e, column, columnIndex, row, rowIndex) => {
-          setFlexDetails(row);
-        }
-      }
-    },
-    {
-      dataField: "projects",
-      text: "Projects",
-      headerStyle: { width: "20%" },
-      editable: false,
-      events: {
-        onClick: (e, column, columnIndex, row, rowIndex) => {
-          setProjectPrefs(row);
-        }
-      }
-    },
-    {
-      dataField: "rights",
-      text: "User rights",
-      headerStyle: { width: "20%" },
-      editable: false,
-      formatter: cell => cellOptions[cell],
-      events: {
-        onClick: (e, column, columnIndex, row, rowIndex) => {
-          setPrivileges(row);
-        }
-      }
-    },
-    {
-      dataField: "password",
-      text: "",
-      headerStyle: { width: "10%" },
-      editable: false,
-      events: {
-        onClick: (e, column, columnIndex, row, rowIndex) => {
-          setChangePassword(row);
+    this.state = {
+      editUserDetails: null,
+      editFlexDetails: null,
+      editProjectPrefs: null,
+      editPrivileges: null,
+      changePassword: null
+    };
+
+    this.onProjectPrefChange = this.onProjectPrefChange.bind(this);
+
+    this.columnsProp = [
+      {
+        dataField: "personId",
+        text: "Person Id",
+        headerStyle: { width: "10%" },
+        hidden: false
+      },
+      {
+        dataField: "info",
+        text: "Personal details",
+        headerStyle: { width: "20%" },
+        editable: false,
+        events: {
+          onClick: (e, column, columnIndex, row, rowIndex) => {
+            this.setState({ editUserDetails: row });
+          }
         }
       },
+      {
+        dataField: "flex",
+        text: "Flex hours",
+        headerStyle: { width: "20%" },
+        editable: false,
+        events: {
+          onClick: (e, column, columnIndex, row, rowIndex) => {
+            this.setState({ editFlexDetails: row });
+          }
+        }
+      },
+      {
+        dataField: "projects",
+        text: "Projects",
+        headerStyle: { width: "20%" },
+        editable: false,
+        events: {
+          onClick: (e, column, columnIndex, row, rowIndex) => {
+            this.props.dispatch(
+              postProjectPreferences({ personId: row.personId })
+            );
+            this.setState({ editProjectPrefs: row });
+          }
+        }
+      },
+      {
+        dataField: "rights",
+        text: "User rights",
+        headerStyle: { width: "20%" },
+        editable: false,
+        formatter: cell => cellOptions[cell],
+        events: {
+          onClick: (e, column, columnIndex, row, rowIndex) => {
+            this.setState({ editPrivileges: row });
+          }
+        }
+      },
+      {
+        dataField: "password",
+        text: "",
+        headerStyle: { width: "10%" },
+        editable: false,
+        events: {
+          onClick: (e, column, columnIndex, row, rowIndex) => {
+            this.setState({ changePassword: row });
+          }
+        },
 
-      formatter: (cellContent, row) => <Button>Change Password</Button>
+        formatter: (cellContent, row) => <Button>Change Password</Button>
+      }
+    ];
+  }
+
+  componentDidMount() {
+    this.props.dispatch(fetchPersons());
+  }
+
+  onProjectPrefChange(project) {
+    console.log(this.state.editProjectPrefs);
+    console.log(project);
+    if (project != null) {
+      const params = {
+        personId: this.state.editProjectPrefs.personId,
+        projectId: project.projectId,
+        selected: !project.selected
+      };
+      this.props.dispatch(postProjectPreferences(params));
+    } else {
+      this.setState({ editProjectPrefs: null });
+      this.props.dispatch(fetchPersons());
     }
-  ];
+  }
 
-  return (
-    <>
-      {editUserDetails && (
-        <UserDetailModal
-          user={editUserDetails}
-          onSave={user => {
-            if (user != null) {
-              console.log("save pressed");
-              console.log(user);
-            }
-            setUserDetails(null);
-          }}
-        />
-      )}
-      {editFlexDetails && (
-        <FlexDetailModal
-          user={editFlexDetails}
-          onSave={user => {
-            if (user != null) {
-              console.log("save pressed");
-              console.log(user);
-            }
-            setFlexDetails(null);
-          }}
-        />
-      )}
-      {editProjectPrefs && (
-        <ProjectPrefModal
-          user={editProjectPrefs}
-          onSave={user => {
-            if (user != null) {
-              console.log("save pressed");
-              console.log(user);
-            }
-            setProjectPrefs(null);
-          }}
-        />
-      )}
-      {editPrivileges && (
-        <PrivilegeModal
-          user={editPrivileges}
-          onSave={user => {
-            if (user != null) {
-              console.log("save pressed");
-              console.log(user);
-            }
-            setPrivileges(null);
-          }}
-        />
-      )}
+  render() {
+    const persons = this.props.personadmin;
+    console.log(persons);
 
-      {changePassword && (
-        <PasswordModal
-          user={changePassword}
-          onSave={user => {
-            if (user != null) {
-              console.log("save pressed");
-              console.log(user);
-            }
-            setChangePassword(null);
-          }}
-        />
-      )}
+    return (
+      <>
+        {this.state.editUserDetails && (
+          <UserDetailModal
+            user={this.state.editUserDetails}
+            onSave={user => {
+              if (user != null) {
+                console.log("save pressed");
+                console.log(user);
+              }
+            }}
+          />
+        )}
+        {this.state.editFlexDetails && (
+          <FlexDetailModal
+            user={this.state.editFlexDetails}
+            onSave={user => {
+              if (user != null) {
+                console.log("save pressed");
+                console.log(user);
+              }
+            }}
+          />
+        )}
+        {this.state.editProjectPrefs && (
+          <ProjectPrefModal
+            user={this.state.editProjectPrefs}
+            customers={this.props.projectprefview}
+            onSave={this.onProjectPrefChange}
+          />
+        )}
+        {this.state.editPrivileges && (
+          <PrivilegeModal
+            user={this.state.editPrivileges}
+            onSave={user => {
+              if (user != null) {
+                console.log("save pressed");
+                console.log(user);
+              }
+            }}
+          />
+        )}
 
-      <BootstrapTable
-        bordered
-        striped
-        bootstrap4
-        keyField="personId"
-        data={persons}
-        columns={columnsProp}
-        cellEdit={this.cellEditProp}
-      />
-    </>
-  );
+        {this.state.changePassword && (
+          <PasswordModal
+            user={this.state.changePassword}
+            onSave={user => {
+              if (user != null) {
+                console.log("save pressed");
+                console.log(user);
+              }
+            }}
+          />
+        )}
+
+        <BootstrapTable
+          bordered
+          striped
+          bootstrap4
+          keyField="personId"
+          data={persons}
+          columns={this.columnsProp}
+        />
+      </>
+    );
+  }
 }
 
-export default function index() {
-  const props = {
-    persons: [
-      {
-        personId: 1,
-        info: "Aapeli [ apel ]",
-        fullname: "Aapeli Root",
-        email: "apel@ap.fi",
-        flexdate: "",
-        flexstart: 0,
-        rights: 5,
-        projects: []
-      },
-      {
-        personId: 2,
-        info: "Kiipeli [ kpl ]",
-        fullname: "Kiipeli Ruut",
-        email: "ruut@ap.fi",
-        flexdate: "2020-01-01",
-        flexstart: 0,
-        rights: 3,
-        projects: []
-      },
-      {
-        personId: 3,
-        info: "Repeli [ rebel ]",
-        fullname: "Rebel Roosna",
-        email: "roosna@ap.fi",
-        flexdate: "",
-        flexstart: 0,
-        rights: 0,
-        projects: []
-      }
-    ]
-  };
-  return PersonAdminView(props);
+function mapStateToProps(state) {
+  const customers =
+    state.projectprefview.customers == null
+      ? []
+      : state.projectprefview.customers;
+  const props =
+    state == null
+      ? { personadmin: [], projectprefview: [] }
+      : Object.assign(
+          {},
+          { error: state.error },
+          { personadmin: state.personadmin },
+          { projectprefview: customers }
+        );
+  console.log("mapStateToProps");
+  console.log(props);
+  return props;
 }
+
+export default connect(mapStateToProps)(PersonAdminView);
