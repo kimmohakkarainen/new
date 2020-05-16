@@ -6,7 +6,8 @@ import {
   Form,
   Collapse,
   Card,
-  ListGroup
+  ListGroup,
+  Spinner
 } from "react-bootstrap";
 
 export default function ProjectPrefModal({ user, customers, onSave }) {
@@ -31,6 +32,7 @@ export default function ProjectPrefModal({ user, customers, onSave }) {
             <Form.Label>Fullname</Form.Label>
             <Form.Control type="text" readOnly defaultValue={user.fullname} />
           </Form.Group>
+          {customers.length == 0 && <Spinner animation="grow" size="lg" />}
           {customers.map(customer => {
             return (
               <Collapse
@@ -55,7 +57,7 @@ export default function ProjectPrefModal({ user, customers, onSave }) {
                       <ListGroup>
                         {customer.projects.map(project => {
                           const name =
-                            project.notes == null
+                            project.notes == null || project.notes.length == 0
                               ? project.name
                               : project.name + ' "' + project.notes + '"';
                           return (

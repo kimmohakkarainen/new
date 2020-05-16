@@ -7,6 +7,7 @@ import {
   Form,
   Collapse,
   ListGroup,
+  Spinner
 } from "react-bootstrap";
 
 import BootstrapTable from "react-bootstrap-table-next";
@@ -47,9 +48,11 @@ class ProjectPreferences extends Component {
             <strong>Project Preferences</strong>
           </Card.Header>
         </Card>
+        {customers.length == 0 && <Spinner animation="grow" size="lg" />}
         {customers.map(customer => {
           return (
-            <Collapse key={customer.customerId}
+            <Collapse
+              key={customer.customerId}
               in={customerId == null || customer.customerId === customerId}
             >
               <Card key={customer.customerId}>

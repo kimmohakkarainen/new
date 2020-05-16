@@ -11,7 +11,11 @@ import ProjectPrefModal from "./projectprefmodal";
 import PrivilegeModal from "./privilegemodal";
 import PasswordModal from "./passwordmodal";
 
-import { fetchPersons, postProjectPreferences } from "../actions";
+import {
+  fetchPersons,
+  postProjectPreferences,
+  fetchProjectPreferencesSucceeded
+} from "../actions";
 
 const cellOptions = {
   0: "Deleted",
@@ -131,6 +135,7 @@ class PersonAdminView extends Component {
       this.props.dispatch(postProjectPreferences(params));
     } else {
       this.setState({ editProjectPrefs: null });
+      this.props.dispatch(fetchProjectPreferencesSucceeded([]));
       this.props.dispatch(fetchPersons());
     }
   }
@@ -221,8 +226,6 @@ function mapStateToProps(state) {
           { personadmin: state.personadmin },
           { projectprefview: customers }
         );
-  console.log("mapStateToProps");
-  console.log(props);
   return props;
 }
 
