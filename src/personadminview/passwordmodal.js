@@ -15,9 +15,6 @@ export default class PasswordModal extends Component {
 
   clearState() {
     return {
-      modal: false,
-      currentPassword: "",
-      currentPasswordInvalid: false,
       newPassword: "",
       newPasswordValid: false,
       newPasswordInvalid: false,

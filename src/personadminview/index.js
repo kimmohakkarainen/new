@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 
 import { Alert, Container, Row, Col, Button } from "react-bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
-import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 
 import UserDetailModal from "./userdetailmodal";
 import FlexDetailModal from "./flexdetailmodal";
@@ -16,6 +15,8 @@ import {
   postProjectPreferences,
   postPersonDetail,
   postPersonPassword,
+  postPersonRights,
+  postPersonFlex,
   fetchProjectPreferencesSucceeded
 } from "../actions";
 
@@ -28,11 +29,13 @@ const cellOptions = {
   5: "Administrator"
 };
 
-function flexFormatter({ person }) {
-  const date = person.flexdate;
-  if (date != null && date.length > 0) {
-  } else {
+function flexFormatter(cell, row, rowidx, extra) {
+  if (row.flexDate == null) {
     return "";
+  } else if (row.flexStart == null) {
+    return row.flexDate + " 0:00";
+  } else {
+    return row.flexDate + " " + row.flexStart;
   }
 }
 
@@ -51,6 +54,8 @@ class PersonAdminView extends Component {
     this.onProjectPrefChange = this.onProjectPrefChange.bind(this);
     this.onUserDetailChange = this.onUserDetailChange.bind(this);
     this.onPasswordChange = this.onPasswordChange.bind(this);
+    this.onRightsChange = this.onRightsChange.bind(this);
+    this.onFlexChange = this.onFlexChange.bind(this);
 
     this.columnsProp = [
       {
@@ -71,10 +76,12 @@ class PersonAdminView extends Component {
         }
       },
       {
-        dataField: "flex",
+        dataField: "flexDate",
         text: "Flex hours",
         headerStyle: { width: "20%" },
         editable: false,
+        formatter: (cell, row, rowidx, extra) =>
+          flexFormatter(cell, row, rowidx, extra),
         events: {
           onClick: (e, column, columnIndex, row, rowIndex) => {
             this.setState({ editFlexDetails: row });
@@ -141,6 +148,20 @@ class PersonAdminView extends Component {
     this.setState({ changePassword: null });
   }
 
+  onRightsChange(person) {
+    if (person != null) {
+      this.props.dispatch(postPersonRights(person));
+    }
+    this.setState({ editPrivileges: null });
+  }
+
+  onFlexChange(person) {
+    if (person != null) {
+      this.props.dispatch(postPersonFlex(person));
+    }
+    this.setState({ editFlexDetails: null });
+  }
+
   onProjectPrefChange(project) {
     if (project != null) {
       const params = {
@@ -171,12 +192,7 @@ class PersonAdminView extends Component {
         {this.state.editFlexDetails && (
           <FlexDetailModal
             user={this.state.editFlexDetails}
-            onSave={user => {
-              if (user != null) {
-                console.log("save pressed");
-                console.log(user);
-              }
-            }}
+            onSave={this.onFlexChange}
           />
         )}
         {this.state.editProjectPrefs && (
@@ -189,12 +205,7 @@ class PersonAdminView extends Component {
         {this.state.editPrivileges && (
           <PrivilegeModal
             user={this.state.editPrivileges}
-            onSave={user => {
-              if (user != null) {
-                console.log("save pressed");
-                console.log(user);
-              }
-            }}
+            onSave={this.onRightsChange}
           />
         )}
 

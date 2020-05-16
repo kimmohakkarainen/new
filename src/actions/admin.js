@@ -89,6 +89,8 @@ export function postPersonRights(data) {
 }
 
 export function postPersonFlex(data) {
+  console.log("postPersonFlex");
+  console.log(data);
   return dispatch => {
     api
       .postPersonFlex(data)

@@ -22,8 +22,8 @@ export default function PrivilegeModal({ user, onSave }) {
   };
 
   return (
-    <Modal show={user != null} onHide={handleClose}>
-      <Modal.Header closeButton>Edit Person Rights</Modal.Header>
+    <Modal size="lg" show={user != null} onHide={() => {}}>
+      <Modal.Header>Edit Person Rights</Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group controlId="password1">

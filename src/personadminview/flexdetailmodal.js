@@ -1,24 +1,34 @@
 import React, { useState } from "react";
 
 import { Modal, Button, Form } from "react-bootstrap";
+import { DateTimePicker } from "react-widgets";
+import Moment from "moment";
+import momentLocalizer from "react-widgets-moment";
+
+Moment.locale("fi");
+momentLocalizer();
 
 export default function FlexDetailModal({ user, onSave }) {
-  const [date, setDate] = useState(user.flexdate);
-  const [value, setValue] = useState(user.flexstart);
+  console.log("FlexDetailModal");
+  console.log(user);
+  const [date, setDate] = useState(
+    user.flexDate == null ? null : Moment(user.flexDate).toDate()
+  );
+  const [value, setValue] = useState(user.flexStart);
 
   const handleClose = () => onSave(null);
   const handleSave = () => {
     const u = {
       personId: user.personId,
-      flexdate: date,
-      flexstart: value
+      flexDate: date == null ? null : Moment(date).format("YYYY-MM-DD"),
+      flexStart: value
     };
     onSave(u);
   };
 
   return (
-    <Modal show={user != null} onHide={handleClose}>
-      <Modal.Header closeButton>Edit Person Flex Hour Details</Modal.Header>
+    <Modal show={user != null} onHide={() => {}}>
+      <Modal.Header>Edit Person Flex Hour Details</Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group controlId="fullname">
@@ -27,10 +37,10 @@ export default function FlexDetailModal({ user, onSave }) {
           </Form.Group>
           <Form.Group controlId="date">
             <Form.Label>Flex start date</Form.Label>
-            <Form.Control
-              type="date"
+            <DateTimePicker
+              time={false}
               value={date}
-              onChange={e => setDate(e.target.value)}
+              onChange={begin => setDate(begin)}
             />
             <Form.Text className="text-muted">
               Start date for calculating flex hour balance
