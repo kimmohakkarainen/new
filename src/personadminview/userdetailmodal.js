@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
 export default function UserDetailModal({ user, onSave }) {
-  const [fullname, setFullname] = useState(user.fullname);
-  const [email, setEmail] = useState(user.email);
+  const [fullname, setFullname] = useState(
+    user.fullname == null ? "" : user.fullname
+  );
+  const [email, setEmail] = useState(user.email == null ? "" : user.email);
 
   const handleClose = () => onSave(null);
   const handleSave = () => {
@@ -16,11 +18,9 @@ export default function UserDetailModal({ user, onSave }) {
     onSave(u);
   };
 
-  console.log(user);
-
   return (
-    <Modal show={user != null} onHide={handleClose}>
-      <Modal.Header closeButton>Edit Person Details</Modal.Header>
+    <Modal show={user != null} onHide={() => {}}>
+      <Modal.Header>Edit Person Details</Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group controlId="fullname">

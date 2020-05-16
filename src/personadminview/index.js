@@ -14,6 +14,8 @@ import PasswordModal from "./passwordmodal";
 import {
   fetchPersons,
   postProjectPreferences,
+  postPersonDetail,
+  postPersonPassword,
   fetchProjectPreferencesSucceeded
 } from "../actions";
 
@@ -47,6 +49,8 @@ class PersonAdminView extends Component {
     };
 
     this.onProjectPrefChange = this.onProjectPrefChange.bind(this);
+    this.onUserDetailChange = this.onUserDetailChange.bind(this);
+    this.onPasswordChange = this.onPasswordChange.bind(this);
 
     this.columnsProp = [
       {
@@ -123,9 +127,21 @@ class PersonAdminView extends Component {
     this.props.dispatch(fetchPersons());
   }
 
+  onUserDetailChange(person) {
+    if (person != null) {
+      this.props.dispatch(postPersonDetail(person));
+    }
+    this.setState({ editUserDetails: null });
+  }
+
+  onPasswordChange(person) {
+    if (person != null) {
+      this.props.dispatch(postPersonPassword(person));
+    }
+    this.setState({ changePassword: null });
+  }
+
   onProjectPrefChange(project) {
-    console.log(this.state.editProjectPrefs);
-    console.log(project);
     if (project != null) {
       const params = {
         personId: this.state.editProjectPrefs.personId,
@@ -149,12 +165,7 @@ class PersonAdminView extends Component {
         {this.state.editUserDetails && (
           <UserDetailModal
             user={this.state.editUserDetails}
-            onSave={user => {
-              if (user != null) {
-                console.log("save pressed");
-                console.log(user);
-              }
-            }}
+            onSave={this.onUserDetailChange}
           />
         )}
         {this.state.editFlexDetails && (
@@ -190,12 +201,7 @@ class PersonAdminView extends Component {
         {this.state.changePassword && (
           <PasswordModal
             user={this.state.changePassword}
-            onSave={user => {
-              if (user != null) {
-                console.log("save pressed");
-                console.log(user);
-              }
-            }}
+            onSave={this.onPasswordChange}
           />
         )}
 

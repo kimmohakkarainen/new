@@ -1,30 +1,5 @@
-import axios from "axios";
-
-const API_BASE_URL = "http://localhost:8080";
-
-const client = axios.create({
-  baseURL: API_BASE_URL,
-  maxRedirects: 0,
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json"
-  }
-});
-
-/*
- * Check each response whether content-type is not JSON. This indicates that
- * session has timed out
- */
-client.interceptors.response.use(function(response) {
-  const type = response.headers["content-type"];
-  const valid = /application\/json/.test(type);
-
-  if (valid) {
-    return response;
-  } else {
-    window.location.href = "/logout";
-  }
-});
+import { client, excelClient } from "./client.js";
+export * from "./adminapi.js";
 
 export function postLogout() {
   return client.post("/logout");
@@ -83,18 +58,6 @@ export function postProject(params) {
 }
 
 /*
- * Person management
- */
-
-export function getPersons() {
-  return client.get("/rest/admin/persons");
-}
-
-export function postPerson(params) {
-  return client.post("/rest/admin/person", params);
-}
-
-/*
  * Report preview
  */
 
@@ -118,15 +81,6 @@ export function postGraphPreview(params) {
   return client.post("/rest/admin/graph", params);
 }
 
-const excelClient = axios.create({
-  baseURL: API_BASE_URL,
-  responseType: "blob",
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/vnd.ms-excel"
-  }
-});
-
 export function getExcel(params) {
   return excelClient.post("/rest/admin/report/xlsx", params);
 }
@@ -149,14 +103,6 @@ export function getWhoAmI() {
 
 export function postPreferences(params) {
   return client.post("/rest/pref", params);
-}
-
-/*
- * Project Preferences
- */
-
-export function postProjectPreferences(params) {
-  return client.post("/rest/pref/projects", params);
 }
 
 /*

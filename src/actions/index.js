@@ -1,4 +1,7 @@
 import * as api from "../api";
+import { fetchError } from "./common";
+export * from "./admin";
+export * from "./report";
 
 export function postLogout() {
   return dispatch => {
@@ -44,13 +47,6 @@ export function fetchDaySucceeded(data) {
   return {
     type: "FETCH_DAY_SUCCEEDED",
     payload: { dayview: data, error: null }
-  };
-}
-
-export function fetchError(error) {
-  return {
-    type: "ERROR",
-    payload: { error: "Connection error" }
   };
 }
 
@@ -185,106 +181,6 @@ export function fetchCustomerProjectsSucceeded(data) {
 }
 
 /*
- * Person Management
- */
-
-export function fetchPersons() {
-  return dispatch => {
-    api
-      .getPersons()
-      .then(resp => {
-        dispatch(fetchPersonsSucceeded(resp.data));
-      })
-      .catch(error => {
-        dispatch(fetchError(error));
-      });
-  };
-}
-
-export function postPerson(data) {
-  return dispatch => {
-    api
-      .postPerson(data)
-      .then(resp => {
-        dispatch(fetchPersonsSucceeded(resp.data));
-      })
-      .catch(error => {
-        dispatch(fetchError(error));
-      });
-  };
-}
-
-export function fetchPersonsSucceeded(data) {
-  return {
-    type: "FETCH_PERSONS_SUCCEEDED",
-    payload: { personadmin: data, error: null }
-  };
-}
-
-/*
- * Reports
- */
-
-export function getReportPreview() {
-  return dispatch => {
-    api
-      .getReportPreview()
-      .then(resp => {
-        dispatch(fetchReportPreviewSucceeded(resp.data));
-      })
-      .catch(error => {
-        dispatch(fetchError(error));
-      });
-  };
-}
-
-export function fetchReportPreview(params) {
-  return dispatch => {
-    dispatch(fetchReportPreviewSucceeded(params));
-    api
-      .postReportPreview(params)
-      .then(resp => {
-        dispatch(fetchReportPreviewSucceeded(resp.data));
-      })
-      .catch(error => {
-        dispatch(fetchError(error));
-      });
-  };
-}
-
-export function fetchReportPreviewSucceeded(data) {
-  return {
-    type: "FETCH_REPORT_PREVIEW_SUCCEEDED",
-    payload: { reportview: data, error: null }
-  };
-}
-
-export function getExcel(params) {
-  return dispatch => {
-    api
-      .getExcel(params)
-      .then(response => {
-        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-          // this is for IE 11
-          window.navigator.msSaveOrOpenBlob(response.data, "report.xlsx");
-        } else {
-          // for other browsers
-          const url = window.URL.createObjectURL(response.data);
-          const link = document.createElement("a");
-          document.body.appendChild(link);
-          link.href = url;
-          link.setAttribute("download", "report.xlsx");
-          link.click();
-          window.URL.revokeObjectURL(url);
-        }
-      })
-      .catch(error => {
-        dispatch(fetchError(error));
-      });
-  };
-}
-
-/*
  * Graphs
  */
 
@@ -323,37 +219,6 @@ export function fetchGraphPreviewSucceeded(data) {
   return {
     type: "FETCH_GRAPH_PREVIEW_SUCCEEDED",
     payload: { graphview: data, error: null }
-  };
-}
-
-/*
- * Change Password
- */
-
-export function postChangePassword(params) {
-  return dispatch => {
-    api
-      .postChangePassword(params)
-      .then(resp => {
-        dispatch(changePasswordSucceeded(resp.data));
-      })
-      .catch(error => {
-        dispatch(fetchError(error));
-      });
-  };
-}
-
-export function changePasswordSucceeded(data) {
-  return {
-    type: "CHANGE_PASSWORD_SUCCEEDED",
-    payload: { passwordview: data, error: null }
-  };
-}
-
-export function dismissPasswordDialog() {
-  return {
-    type: "DISMISS_PASSWORD_DIALOG",
-    payload: { passwordview: {}, error: null }
   };
 }
 
