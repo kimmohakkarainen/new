@@ -1,5 +1,6 @@
 import { client, excelClient } from "./client.js";
 export * from "./adminapi.js";
+export * from "./flexapi.js";
 
 export function postLogout() {
   return client.post("/logout");
@@ -103,28 +104,4 @@ export function getWhoAmI() {
 
 export function postPreferences(params) {
   return client.post("/rest/pref", params);
-}
-
-/*
- * Flex hour calls
- */
-
-export function fetchFlexProjects() {
-  return client.get("/rest/admin/flex/projects");
-}
-
-export function postFlexProject(params) {
-  return client.post("/rest/admin/flex/project", params);
-}
-
-export function fetchFlexPersons() {
-  return client.get("/rest/admin/flex/persons");
-}
-
-export function postFlexPerson(params) {
-  return client.post("/rest/admin/flex/person", params);
-}
-
-export function fetchPersonFlexSummary(personId) {
-  return client.get("/rest/admin/flex/person/" + personId);
 }
