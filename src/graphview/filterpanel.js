@@ -38,6 +38,17 @@ function FilterPanel({
     fetchGraphPreview(parameters);
   }
 
+  function onChangeFilter(filter) {
+    const parameters = {
+      beginDay: Moment(beginDay).format("YYYY-MM-DD"),
+      endDay: Moment(endDay).format("YYYY-MM-DD"),
+      customerFilter: filter.customerFilter,
+      projectFilter: filter.projectFilter,
+      personFilter: filter.personFilter
+    };
+    fetchGraphPreview(parameters);
+  }
+
   const begin = Moment(beginDay).toDate();
   const end = Moment(endDay).toDate();
   const value = {
@@ -54,7 +65,7 @@ function FilterPanel({
         customerOptions={customerOptions}
         personOptions={personOptions}
         projectOptions={projectOptions}
-        onChange={() => {}}
+        onChange={onChangeFilter}
       />
     </div>
   );
