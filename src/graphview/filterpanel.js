@@ -12,7 +12,6 @@ Moment.locale("fi");
 momentLocalizer();
 
 function FilterPanel({
-  getGraphPreview,
   fetchGraphPreview,
   beginDay,
   endDay,
@@ -24,7 +23,7 @@ function FilterPanel({
   projectOptions
 }) {
   useEffect(() => {
-    getGraphPreview();
+    fetchGraphPreview({});
   }, []);
 
   function onChangeTimeRange(range) {
@@ -77,7 +76,6 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getGraphPreview: () => dispatch(getGraphPreview()),
     fetchGraphPreview: params => dispatch(fetchGraphPreview(params))
   };
 };

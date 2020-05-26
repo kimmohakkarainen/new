@@ -18,6 +18,7 @@ import PasswordView from "./passwordview";
 import PrefView from "./prefview";
 import FlexProjectView from "./flexprojectview";
 import FlexPersonView from "./flexpersonview";
+import FlexMonthView from "./flexmonthview";
 import PersonAdminView from "./personadminview";
 
 import { fetchWhoAmI } from "./actions";
@@ -40,7 +41,7 @@ class App extends Component {
       <div className="App">
         <Router>
           <div>
-            <Menu privileged={privileged} name={name} />
+            <Menu privileged={true} name={name} />
 
             {this.props.error && (
               <Alert variant="danger">
@@ -52,11 +53,13 @@ class App extends Component {
             <Route path="/day" component={DayView} />
             <Route path="/week" component={WeekView} />
             <Route path="/month" component={MonthView} />
+            <Route path="/flex" component={FlexMonthView} />
             <Route path="/admin/customers" component={CustomerView} />
             <Route path="/admin/customer/:id" component={ProjectView} />
             <Route path="/admin/persons" component={PersonAdminView} />
             <Route path="/admin/reports" component={ReportView} />
             <Route path="/admin/graphs" component={GraphView} />
+
             <Route path="/admin/flexprojects" component={FlexProjectView} />
             <Route path="/admin/flexpersons" component={FlexPersonView} />
             <Route exact path="/logout" component={LogoutView} />
