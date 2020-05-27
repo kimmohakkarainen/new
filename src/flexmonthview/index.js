@@ -1,34 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
-import { Alert, Container, Row, Col, Card, Button } from "react-bootstrap";
-import BootstrapTable from "react-bootstrap-table-next";
+import { Card } from "react-bootstrap";
 
-import { fetchFlexPersons } from "../actions";
+import FlexMonthComponent from "./flexmonthcomponent";
+import { fetchPersonFlexSummary } from "../actions";
 
-function FlexMonthView() {
+function FlexMonthView({ fetchPersonFlexSummary, personId, months }) {
+  useEffect(() => {
+    fetchPersonFlexSummary(0);
+  }, [fetchPersonFlexSummary]);
+
   return (
-    <Card>
-      <Card.Header>
-        <strong>Header</strong>
-      </Card.Header>
-      <Card.Body>
-        <strong>this is body</strong>
-      </Card.Body>
-      <Card.Footer>
-        <Button>OK</Button>
-      </Card.Footer>
-    </Card>
+    <div>
+      <Card>
+        <Card.Header>
+          <strong>Flex Hour Report</strong>
+        </Card.Header>
+      </Card>
+      <FlexMonthComponent months={months} />
+    </div>
   );
 }
 
 function mapStateToProps(state) {
-  return {};
+  const flex = state.personFlexSummary;
+
+  const props =
+    flex != null && flex.months != null
+      ? state.personFlexSummary
+      : { months: [] };
+
+  return props;
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getFlexPersons: () => dispatch(fetchFlexPersons())
+    fetchPersonFlexSummary: personId =>
+      dispatch(fetchPersonFlexSummary(personId))
   };
 };
 

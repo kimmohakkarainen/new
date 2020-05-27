@@ -21,5 +21,9 @@ export function postFlexPerson(params) {
 }
 
 export function fetchPersonFlexSummary(personId) {
-  return client.get("/rest/admin/flex/person/" + personId);
+  if (personId > 0) {
+    return client.get("/rest/admin/flex/person/" + personId);
+  } else {
+    return client.get("/rest/admin/flex/person");
+  }
 }
