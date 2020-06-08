@@ -140,4 +140,4 @@ function mapStateToProps(state) {
   return props;
 }
 
-export default connect(mapStateToProps)(WeekView);
+export default connect(mapStateToPropsOffline)(WeekView);

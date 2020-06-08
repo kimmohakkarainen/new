@@ -85,6 +85,11 @@ export default class Menu extends Component {
                 Week
               </Nav.Link>
             </IndexLinkContainer>
+            <IndexLinkContainer to="/newweek">
+              <Nav.Link eventKey={3} href="/">
+                NewWeek
+              </Nav.Link>
+            </IndexLinkContainer>
             <IndexLinkContainer to="/month">
               <Nav.Link eventKey={4} href="/month">
                 Month

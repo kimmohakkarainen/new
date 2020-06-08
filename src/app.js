@@ -8,6 +8,7 @@ import Menu from "./menu";
 import LogoutView from "./logoutview";
 import DayView from "./dayview";
 import WeekView from "./weekview";
+import NewWeekView from "./newweekview";
 import MonthView from "./monthview";
 import CustomerView from "./customerview";
 import ProjectView from "./projectview";
@@ -52,6 +53,7 @@ class App extends Component {
             <Route exact path="/" component={DayView} />
             <Route path="/day" component={DayView} />
             <Route path="/week" component={WeekView} />
+            <Route path="/newweek" component={NewWeekView} />
             <Route path="/month" component={MonthView} />
             <Route path="/flex" component={FlexMonthView} />
             <Route path="/admin/customers" component={CustomerView} />
