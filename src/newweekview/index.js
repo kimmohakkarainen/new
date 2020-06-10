@@ -22,6 +22,14 @@ function NewWeekView({ fetchWeek, postWeek, title, rows, header }) {
     afterSaveCell: onAfterSaveCell // a hook for after saving cell
   });
 
+  function rowStyle(row, rowIndex) {
+    if (row.projectId === 0) {
+      return { backgroundColor: "#bcc5cd" };
+    } else {
+      return {};
+    }
+  }
+
   function onAfterSaveCell(oldValue, newValue, row, column) {
     if (isValidHourString(newValue)) {
       const newstate = {
@@ -87,6 +95,7 @@ function NewWeekView({ fetchWeek, postWeek, title, rows, header }) {
         data={rows}
         columns={columns}
         cellEdit={cellEditProp}
+        rowStyle={rowStyle}
       />
     </div>
   );
