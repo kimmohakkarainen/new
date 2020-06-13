@@ -8,10 +8,22 @@ import getColumnsProp from "./columnsprop";
 import { fetchWeek, postWeek } from "../actions";
 import { isValidHourString } from "../components";
 
-function NewWeekView({ fetchWeek, postWeek, title, rows, header }) {
+function NewWeekView({
+  fetchWeek,
+  postWeek,
+  title,
+  rows,
+  header,
+  nextWeek,
+  previousWeek
+}) {
   useEffect(() => {
     fetchWeek();
   }, []);
+
+  function handleNext() {
+    fetchWeek();
+  }
 
   const cellEditProp = cellEditFactory({
     mode: "click",
@@ -21,14 +33,6 @@ function NewWeekView({ fetchWeek, postWeek, title, rows, header }) {
     },
     afterSaveCell: onAfterSaveCell // a hook for after saving cell
   });
-
-  function rowStyle(row, rowIndex) {
-    if (row.projectId === 0) {
-      return { backgroundColor: "#bcc5cd" };
-    } else {
-      return {};
-    }
-  }
 
   function onAfterSaveCell(oldValue, newValue, row, column) {
     if (isValidHourString(newValue)) {
@@ -51,12 +55,18 @@ function NewWeekView({ fetchWeek, postWeek, title, rows, header }) {
       <Container fluid style={{ padding: "15px" }}>
         <Row>
           <Col sm={3} className="d-none d-sm-block">
-            <Button variant="outline-primary" onClick={() => {}}>
+            <Button
+              variant="outline-primary"
+              onClick={() => fetchWeek(previousWeek)}
+            >
               &larr; Previous
             </Button>
           </Col>
           <Col xs={3} className="d-block d-sm-none">
-            <Button variant="outline-primary" onClick={() => {}}>
+            <Button
+              variant="outline-primary"
+              onClick={() => fetchWeek(previousWeek)}
+            >
               &larr;
             </Button>
           </Col>
@@ -69,7 +79,10 @@ function NewWeekView({ fetchWeek, postWeek, title, rows, header }) {
             className="d-block d-sm-none"
             style={{ textAlign: "right" }}
           >
-            <Button variant="outline-primary" onClick={() => {}}>
+            <Button
+              variant="outline-primary"
+              onClick={() => fetchWeek(nextWeek)}
+            >
               &rarr;
             </Button>
           </Col>
@@ -78,7 +91,10 @@ function NewWeekView({ fetchWeek, postWeek, title, rows, header }) {
             className="d-none d-sm-block"
             style={{ textAlign: "right" }}
           >
-            <Button variant="outline-primary" onClick={() => {}}>
+            <Button
+              variant="outline-primary"
+              onClick={() => fetchWeek(nextWeek)}
+            >
               Next &rarr;
             </Button>
           </Col>
@@ -96,44 +112,6 @@ function NewWeekView({ fetchWeek, postWeek, title, rows, header }) {
   );
 }
 
-function mapStateToPropsStatic(state) {
-  const props = {
-    today: "1.1.2019",
-    header: [
-      { date: "1.1.2019", workday: false },
-      { date: "2.1.2019", workday: true },
-      { date: "3.1.2019", workday: true },
-      { date: "4.1.2019", workday: true },
-      { date: "5.1.2019", workday: true },
-      { date: "6.1.2019", workday: false },
-      { date: "7.1.2019", workday: false }
-    ],
-    projects: [
-      {
-        projectId: 1,
-        customerName: "Customer",
-        projectName: "Project",
-        mon: "0:00",
-        tue: "1:00",
-        wed: "2:30",
-        thu: "3:30",
-        fri: "4:30",
-        sat: "0:00",
-        sun: "0:00",
-        week: "1:00"
-      },
-      {
-        projectId: 2,
-        time: "6:30",
-        project: "Harjoitus",
-        customer: "Customer",
-        week: "12:00",
-        month: "75:00"
-      }
-    ]
-  };
-  return props;
-}
 function mapStateToProps({ weekview }) {
   const header = [
     { date: "1.1.2019", workday: false },

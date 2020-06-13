@@ -106,7 +106,7 @@ function styleGenerator(header) {
       return {};
     } else {
       return {
-        backgroundColor: "#dce5ed"
+        backgroundColor: "#ececec"
       };
     }
   };
