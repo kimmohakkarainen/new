@@ -44,11 +44,7 @@ function NewWeekView({ fetchWeek, postWeek, title, rows, header }) {
     }
   }
 
-  console.log(header);
-
   const columns = getColumnsProp(header);
-
-  console.log(columns);
 
   return (
     <div>
@@ -95,7 +91,6 @@ function NewWeekView({ fetchWeek, postWeek, title, rows, header }) {
         data={rows}
         columns={columns}
         cellEdit={cellEditProp}
-        rowStyle={rowStyle}
       />
     </div>
   );
