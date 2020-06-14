@@ -113,6 +113,7 @@ function NewWeekView({
 }
 
 function mapStateToProps({ weekview }) {
+  /*
   const header = [
     { date: "1.1.2019", workday: false },
     { date: "2.1.2019", workday: true },
@@ -122,8 +123,9 @@ function mapStateToProps({ weekview }) {
     { date: "6.1.2019", workday: false },
     { date: "7.1.2019", workday: false }
   ];
+  */
 
-  var { title, rows, previousWeek, nextWeek } = weekview;
+  var { title, rows, previousWeek, nextWeek, header } = weekview;
 
   rows = rows == null ? [] : rows;
 

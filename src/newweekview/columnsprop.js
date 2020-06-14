@@ -5,8 +5,8 @@ export const columnsProp = [
     text: "Customer",
     editable: false,
     headerStyle: { width: "22%" },
-    headerClasses: "weekview-customer-column d-none d-lg-table-cell",
-    classes: "weekview-customer-column d-none d-lg-table-cell"
+    headerClasses: "weekview-customer-column d-none d-xl-table-cell",
+    classes: "weekview-customer-column d-none d-xl-table-cell"
   },
   {
     dataField: "projectName",
@@ -18,7 +18,6 @@ export const columnsProp = [
   },
   {
     dataField: "mon",
-    text: "Mon",
     editable: true,
     headerClasses: "weekview-day-header",
     classes: "weekview-day-column",
@@ -26,7 +25,6 @@ export const columnsProp = [
   },
   {
     dataField: "tue",
-    text: "Tue",
     editable: true,
     headerClasses: "weekview-day-header",
     classes: "weekview-day-column",
@@ -34,7 +32,6 @@ export const columnsProp = [
   },
   {
     dataField: "wed",
-    text: "Wed",
     editable: true,
     headerClasses: "weekview-day-header",
     classes: "weekview-day-column",
@@ -42,7 +39,6 @@ export const columnsProp = [
   },
   {
     dataField: "thu",
-    text: "Thu",
     editable: true,
     headerClasses: "weekview-day-header",
     classes: "weekview-day-column",
@@ -50,15 +46,12 @@ export const columnsProp = [
   },
   {
     dataField: "fri",
-    text: "Fri",
     editable: true,
-    headerClasses: "weekview-day-header d-none d-lg-table-cell",
-    classes: "weekview-day-column d-none d-lg-table-cell",
-    editCellClasses: "d-none d-lg-table-cell"
+    headerClasses: "weekview-day-header",
+    classes: "weekview-day-column"
   },
   {
     dataField: "sat",
-    text: "Sat",
     editable: true,
     style: { backgroundColor: "#bcc5cd" },
     headerStyle: { width: "7%", backgroundColor: "var(--gray)" },
@@ -82,8 +75,8 @@ export const columnsProp = [
     editable: false,
     style: { backgroundColor: "var(--light)" },
     headerStyle: { width: "7%", backgroundColor: "var(--light)" },
-    headerClasses: "weekview-day-header",
-    classes: "weekview-day-column"
+    headerClasses: "weekview-day-header d-none d-md-table-cell",
+    classes: "weekview-day-column d-none d-md-table-cell"
   }
 ];
 
@@ -112,12 +105,38 @@ function styleGenerator(header) {
   };
 }
 
+function headerText(header) {
+  console.log(header);
+  if (header == null || header.length < 7) {
+    return ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+  } else {
+    return [
+      header[0].dayOfMonth + ". Mo",
+      header[1].dayOfMonth + ". Tu",
+      header[2].dayOfMonth + ". We",
+      header[3].dayOfMonth + ". Th",
+      header[4].dayOfMonth + ". Fr",
+      header[5].dayOfMonth + ". Sa",
+      header[6].dayOfMonth + ". Su"
+    ];
+  }
+}
+
 export default function getColumnsProp(header) {
   const props = Object.assign([], columnsProp);
 
   const hStyle = headerStyleGenerator(header);
   const cStyle = styleGenerator(header);
 
+  const texts = headerText(header);
+
+  props[3].text = texts[0];
+  props[4].text = texts[1];
+  props[5].text = texts[2];
+  props[6].text = texts[3];
+  props[7].text = texts[4];
+  props[8].text = texts[5];
+  props[9].text = texts[6];
   props[3].headerStyle = hStyle;
   props[4].headerStyle = hStyle;
   props[5].headerStyle = hStyle;
